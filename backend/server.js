@@ -7,7 +7,10 @@ const workflowRoutes = require("./routes/workflowRoutes");
 const executionRoutes = require("./routes/executionRoutes");
 
 const app = express();
-app.use(cors({ origin: process.env.CLIENT_URL || "http://localhost:5173" }));
+const corsOrigin = process.env.CLIENT_URL
+  ? (process.env.CLIENT_URL.trim() === "*" ? "*" : process.env.CLIENT_URL.trim().replace(/\/+$/, ""))
+  : "*";
+app.use(cors({ origin: corsOrigin }));
 app.use(express.json({ limit: "1mb" }));
 
 app.get("/", (req, res) => res.json({ message: "API Workflow Validator Backend is Running!" }));
